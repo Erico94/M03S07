@@ -19,7 +19,7 @@ namespace FichaCadastro.Model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DetalheModel>()
-                         .HasOne(h => h.FichaModel)
+                         .HasOne(h => h.Ficha)
                          .WithMany(w => w.DetalheModels);
 
             modelBuilder.Entity<DetalheModel>().

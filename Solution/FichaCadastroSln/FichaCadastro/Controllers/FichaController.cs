@@ -57,11 +57,11 @@ namespace FichaCadastro.Controllers
             }
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult Put(int id, [FromBody] FichaUpdateDto fichaUpdateDto)
+        public ActionResult Put([FromRoute] int id, [FromBody] FichaUpdateDto fichaUpdateDto)
         {
             try
             {
@@ -86,5 +86,111 @@ namespace FichaCadastro.Controllers
                 return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), ex);
             }
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            try
+            {
+                FichaModel? fichaModel = _fichaCadastroDbContext.FichaModels.Include(i => i.DetalheModels).Where(w => w.Id == id).FirstOrDefault();
+
+                if (fichaModel == null)
+                {
+                    return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "Registro não encontrado.");
+                }
+
+                if (fichaModel != null && fichaModel.DetalheModels.Count > 0)
+                {
+                    return StatusCode(HttpStatusCode.Conflict.GetHashCode(), "Não é possivel remover porque contém detalhes.");
+                }
+
+                _fichaCadastroDbContext.FichaModels.Remove(fichaModel);
+                _fichaCadastroDbContext.SaveChanges();
+
+
+                return StatusCode(HttpStatusCode.OK.GetHashCode(), "Registro removido com sucesso.");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), ex);
+            }
+        }
+
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<FichaDetalhesReadDto>> Get([FromQuery] string? email)
+        {
+            try
+            {
+                List<FichaModel> fichaModels;
+
+                if (email == null || email == "")
+                {
+
+                    fichaModels = _fichaCadastroDbContext.FichaModels.Include(i => i.DetalheModels).ToList();
+                }
+                else
+                {
+                    fichaModels = _fichaCadastroDbContext.FichaModels.Where(w => w.Email == email).ToList();
+                }
+                IEnumerable<FichaDetalhesReadDto> fichaDetalhesReadDto = _mapper.Map<IEnumerable<FichaDetalhesReadDto>>(fichaModels);
+                return StatusCode(HttpStatusCode.OK.GetHashCode(), fichaDetalhesReadDto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), ex);
+            }
+        }
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<FichaDetalhesReadDto> Get([FromRoute] int id)
+        {
+            try
+            {
+                if(id == 0)
+                {
+                    return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "Registro não pode ser zero!.");
+                }
+                FichaModel? fichaModel = _fichaCadastroDbContext.FichaModels.Include(i => i.DetalheModels)
+                    .Where(w => w.Id == id).FirstOrDefault();
+
+                if (fichaModel == null)
+                {
+                    return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "Registro não encontrado.");
+                }
+
+                FichaDetalhesReadDto fichaDetalhesReaDto = _mapper.Map<FichaDetalhesReadDto>(fichaModel);
+                return StatusCode(HttpStatusCode.OK.GetHashCode(), fichaDetalhesReaDto);
+
+                //if (fichaModel != null && fichaModel.DetalheModels.Count > 0)
+                //{
+                //    return StatusCode(HttpStatusCode.Conflict.GetHashCode(), "Não é possivel remover porque contém detalhes.");
+                //}
+
+                //_fichaCadastroDbContext.FichaModels.Remove(fichaModel);
+                //_fichaCadastroDbContext.SaveChanges();
+
+
+                //return StatusCode(HttpStatusCode.OK.GetHashCode(), "Registro removido com sucesso.");
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), ex);
+            }
+
+        }
+
+
     }
 }

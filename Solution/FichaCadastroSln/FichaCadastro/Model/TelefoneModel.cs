@@ -21,6 +21,6 @@ namespace FichaCadastro.Model
         [Required]
         public int FichaModelId { get; set; }
 
-        public FichaModel FichaModel { get; set; }
+        public FichaModel Ficha { get; set; }
     }
 }

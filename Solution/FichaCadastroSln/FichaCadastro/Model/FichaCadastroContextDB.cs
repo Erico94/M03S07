@@ -20,7 +20,15 @@ namespace FichaCadastro.Model
         {
             modelBuilder.Entity<DetalheModel>()
                          .HasOne(h => h.Ficha)
-                         .WithMany(w => w.DetalheModels);
+                         .WithMany(w => w.DetalheModels)
+                         .HasForeignKey(h =>h.fichaModelId)
+                         .IsRequired();
+
+            modelBuilder.Entity<TelefoneModel>()
+                .HasOne(h => h.Ficha)
+                .WithOne(w => w.Telefone)
+                .HasForeignKey<TelefoneModel>(h=>h.FichaModelId)
+                .IsRequired();
 
             modelBuilder.Entity<DetalheModel>().
                 Property(p => p.DataCadastro).

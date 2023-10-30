@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FichaCadastro.Dto.Ficha;
+using FichaCadastro.Dto.Telefone;
 using FichaCadastro.Model;
 
 namespace FichaCadastro.AutoMapper
@@ -29,6 +30,12 @@ namespace FichaCadastro.AutoMapper
 
             //origem .... destino
             CreateMap<DetalheModel, DetalhesReadDto>();
+
+            //origem...destino
+            CreateMap<TelefoneModel, TelefoneReadDto>();
+            CreateMap<TelefoneCreateDto, TelefoneModel>();
+
+
 
         }
     }

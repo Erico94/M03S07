@@ -11,6 +11,7 @@ namespace FichaCadastro.Model
     {
         public DbSet<DetalheModel> DetalheModels { get; set; }
         public DbSet<FichaModel> FichaModels { get; set; }
+        public DbSet<TelefoneModel> Telefones { get; set; }
 
         public FichaCadastroContextDB(DbContextOptions options) : base(options)
         {

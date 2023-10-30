@@ -11,7 +11,7 @@ namespace FichaCadastro.Model
         [Column (TypeName = "VARCHAR"), StringLength(500), Required] public string FeedBack { get; set; }
         [Required] public NotasEnum Nota { get; set; }
         [Required] public bool Situacao { get; set; }
-        [Required] public int fichaModelId { get; set; }
+        [Required] public int FichaModelId { get; set; }
         public FichaModel Ficha { get; set; }
     }
 }

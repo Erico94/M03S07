@@ -52,5 +52,28 @@ namespace FichaCadastro.Controllers
                 return BadRequest("Erro interno");
             }
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            try
+            {
+                TelefoneModel telefone = _dbContext.Telefones.Where(w => w.Id == id).FirstOrDefault();
+                if (telefone != null)
+                {
+                    _dbContext.Remove(telefone);
+                    _dbContext.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Id de telefone não encontrado");
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest("Erro interno");
+            }
+        }
     }
 }

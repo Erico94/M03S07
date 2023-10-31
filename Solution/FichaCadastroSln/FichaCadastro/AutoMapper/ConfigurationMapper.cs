@@ -34,6 +34,7 @@ namespace FichaCadastro.AutoMapper
             //origem...destino
             CreateMap<TelefoneModel, TelefoneReadDto>();
             CreateMap<TelefoneCreateDto, TelefoneModel>();
+            CreateMap<TelefoneModel, IEnumerable<TelefoneReadDto>>();
 
 
 

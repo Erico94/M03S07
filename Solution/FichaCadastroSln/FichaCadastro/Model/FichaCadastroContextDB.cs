@@ -22,7 +22,7 @@ namespace FichaCadastro.Model
             modelBuilder.Entity<DetalheModel>()
                          .HasOne(h => h.Ficha)
                          .WithMany(w => w.DetalheModels)
-                         .HasForeignKey(h =>h.fichaModelId)
+                         .HasForeignKey(h=>h.FichaModelId)
                          .IsRequired();
 
             modelBuilder.Entity<TelefoneModel>()

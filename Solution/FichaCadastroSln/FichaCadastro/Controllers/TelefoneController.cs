@@ -53,6 +53,29 @@ namespace FichaCadastro.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public ActionResult<TelefoneReadDto> Put([FromRoute] int id, [FromBody] TelefoneUpdateDto telefoneUpdate)
+        {
+            try
+            {
+                TelefoneModel telefoneModel = _dbContext.Telefones.Where(w => w.Id == id).FirstOrDefault();
+                if (telefoneModel == null)
+                {
+                    return NoContent();
+                }
+                telefoneModel = _mapper.Map<TelefoneModel>(telefoneUpdate);
+                _dbContext.ChangeTracker.Clear();
+                _dbContext.Entry(telefoneModel).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _dbContext.SaveChanges();
+                TelefoneReadDto telefoneRead = _mapper.Map<TelefoneReadDto>(telefoneModel);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Erro interno");
+            }
+        }
+
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {

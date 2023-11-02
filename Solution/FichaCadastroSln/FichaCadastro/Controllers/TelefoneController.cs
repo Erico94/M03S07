@@ -53,6 +53,21 @@ namespace FichaCadastro.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<TelefoneReadDto> GetPorId([FromRoute]int? id)
+        {
+            try
+            {
+                TelefoneReadDto telefone = _mapper.Map<TelefoneReadDto>
+                        (_dbContext.Telefones.Where(w => w.Id == id.Value));
+                return Ok(telefone);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Erro interno");
+            }
+        }
+
         [HttpPut("{id}")]
         public ActionResult<TelefoneReadDto> Put([FromRoute] int id, [FromBody] TelefoneUpdateDto telefoneUpdate)
         {

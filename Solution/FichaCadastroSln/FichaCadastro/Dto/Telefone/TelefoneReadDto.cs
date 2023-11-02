@@ -14,7 +14,5 @@ namespace FichaCadastro.Dto.Telefone
         public bool Ativo { get; set; }
 
         public int FichaModelId { get; set; }
-
-        public FichaModel Ficha { get; set; }
     }
 }

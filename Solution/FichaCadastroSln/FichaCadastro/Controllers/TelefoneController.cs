@@ -27,8 +27,8 @@ namespace FichaCadastro.Controllers
             TelefoneModel telefoneModel = _mapper.Map<TelefoneModel>(telefoneCreate);
             _dbContext.Add(telefoneModel);
             _dbContext.SaveChanges();
-            TelefoneReadDto telefoneRead = _mapper.Map<TelefoneReadDto>(_dbContext.Telefones
-                .Where(w => w.FichaModelId == telefoneCreate.FichaModelId));
+            telefoneModel = _dbContext.Telefones.Where(w => w.FichaModelId == telefoneCreate.FichaModelId).FirstOrDefault();
+            TelefoneReadDto telefoneRead = _mapper.Map<TelefoneReadDto>(telefoneModel);
             return Created("Criado com sucesso", telefoneRead);
         }
 
@@ -67,7 +67,7 @@ namespace FichaCadastro.Controllers
                 }
                 else
                 {
-                    return BadRequest("Id de telefone não encontrado");
+                    return NoContent();
                 }
             }
             catch (Exception)
